@@ -1,11 +1,11 @@
 require 'rspec'
-require 'QuestionsDatabase'
-$FILEPATH = "./lib/questions_test.db"
+require 'questions_database'
+$FILEPATH =  "./db/questions_test.db"
 
 #Database initialized by import_db.sql - look there for appropriate values
 describe "Reply" do
-  system("rm ./lib/questions_test.db")
-  system("cat ./lib/import_db.sql | sqlite3 lib/questions_test.db")
+  system("rm ./db/questions_test.db")
+  system("cat ./lib/import_db.sql | sqlite3 db/questions_test.db")
 
   context "finding/creating replies" do
     it "can construct reply by id" do
