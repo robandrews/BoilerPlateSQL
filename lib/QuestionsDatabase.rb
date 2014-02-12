@@ -5,6 +5,7 @@ require_relative 'user'
 require_relative 'reply'
 require_relative 'QuestionLike'
 require_relative 'QuestionFollower'
+require_relative 'tag'
 
 class QuestionsDatabase < SQLite3::Database
   include Singleton
