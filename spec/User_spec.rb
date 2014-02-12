@@ -73,4 +73,33 @@ describe "User" do
       expect([2, 3]).to include(ben.liked_questions.last.id)
     end
   end
+
+  context "saving a new entry" do
+    new_user = nil
+    before(:each) do
+      new_user = User.new({"id" => nil, "fname" => "test", "lname" => "user"})
+    end
+    it "can save to database" do
+      start_length = QuestionsDatabase.instance.execute("SELECT * FROM users").length
+      new_user.save
+      end_length = QuestionsDatabase.instance.execute("SELECT * FROM users").length
+      expect(end_length).to eq(start_length + 1)
+    end
+
+    it "updates id after saving" do
+      expect(new_user.id).to be(nil)
+      new_user.save
+      expect(new_user.id).to_not be(nil)
+    end
+
+    it "updates existing entry" do
+      new_user.save
+      id = new_user.id
+      expect(User.find_by_id(id).fname).to eq("test")
+      new_user.fname = "test2"
+      new_user.save
+      expect(User.find_by_id(id).fname).to eq("test2")
+      expect(new_user.id).to eq(id)
+    end
+  end
 end

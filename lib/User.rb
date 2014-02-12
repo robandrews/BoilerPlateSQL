@@ -63,7 +63,7 @@ class User
         (?, ?, ?)
       SQL
       QuestionsDatabase.instance.execute(query, @id, @fname, @lname)
-      @id = QuestionsDatabase.last_insert_row_id
+      @id = QuestionsDatabase.instance.last_insert_row_id
     else
       query = <<-SQL
       UPDATE

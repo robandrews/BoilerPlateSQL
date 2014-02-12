@@ -113,16 +113,16 @@ class Reply
     if self.id.nil?
       query = <<-SQL
       INSERT INTO
-        questions(id, question_id, parent_reply, author_id, body)
+        replies(id, question_id, parent_reply, author_id, body)
       VALUES
         (?, ?, ?, ?, ?)
       SQL
       QuestionsDatabase.instance.execute(query, @id, @question_id, @parent_id, @author_id, @body)
-      @id = QuestionsDatabase.last_insert_row_id
+      @id = QuestionsDatabase.instance.last_insert_row_id
     else
       query = <<-SQL
       UPDATE
-        questions
+        replies
       SET
         question_id = ?, parent_reply = ?, author_id = ?, body = ?
       WHERE

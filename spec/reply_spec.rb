@@ -69,4 +69,34 @@ describe "Reply" do
       expect(carefully.parent_reply).to be(nil)
     end
   end
+
+  context "saving a new entry" do
+    new_reply = nil
+    before(:each) do
+      new_reply = Reply.new({"id" => nil, "author_id" => 2, "question_id" => 2,
+        "body" => "test", "parent_reply" => 3})
+    end
+    it "can save to database" do
+      start_length = QuestionsDatabase.instance.execute("SELECT * FROM replies").length
+      new_reply.save
+      end_length = QuestionsDatabase.instance.execute("SELECT * FROM replies").length
+      expect(end_length).to eq(start_length + 1)
+    end
+
+    it "updates id after saving" do
+      expect(new_reply.id).to be(nil)
+      new_reply.save
+      expect(new_reply.id).to_not be(nil)
+    end
+
+    it "updates existing entry" do
+      new_reply.save
+      id = new_reply.id
+      expect(Reply.find_by_id(id).body).to eq("test")
+      new_reply.body = "test2"
+      new_reply.save
+      expect(Reply.find_by_id(id).body).to eq("test2")
+      expect(new_reply.id).to eq(id)
+    end
+  end
 end
